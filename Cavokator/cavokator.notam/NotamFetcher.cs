@@ -373,25 +373,11 @@ namespace Cavokator
             try
             {
 
-                AssetManager assets = Application.Context.Assets;
-                byte[] bytes;
-                using (StreamReader sr2 = new StreamReader(assets.Open("certificate_example.p12")))
-                {
-                    using (var memstream = new MemoryStream())
-                    {
-                        sr2.BaseStream.CopyTo(memstream);
-                        bytes = memstream.ToArray();
-                    }
-                }
-
-                X509Certificate2 clientCertificate = new X509Certificate2(bytes, "certificate_password");   // Change this to the real one
-
+               
 
                 // RESTSHARP
-                var client = new RestClient("https://www.aidap.naimes.faa.gov/aidap/XmlNotamServlet");
-                client.ClientCertificates = new X509CertificateCollection() { clientCertificate };
-
-                string postData = "uid=myusername&password=mypasswordA&active=Y";   // Change this to the real one
+                var client = new RestClient("http://localhost:51196/Notam/FetchAidap");
+                string postData = "uid=myusername&password=mypasswordA&active=Y";  // Change this to the real one
 
                 var request = new RestRequest(Method.POST);
                 request.AddParameter("application/x-www-form-urlencoded", postData, ParameterType.RequestBody);
@@ -399,32 +385,7 @@ namespace Cavokator
                 Debug.StartMethodTracing("sample");
                 var response = client.Execute(request);
                 Debug.StopMethodTracing();
-                // RESTSHARP
-
-
-
-                //HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://www.aidap.naimes.faa.gov/aidap/XmlNotamServlet");
-
-                //req.ClientCertificates.Add(clientCertificate);
-                //req.Method = "POST";
-                //req.ContentType = "application/x-www-form-urlencoded";
-
-                //string postData = "uid=myusername&password=mypasswordA&active=Y"; // Change this to the real one
-                //byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                //req.ContentLength = byteArray.Length;
-
-                //using (Stream dataStream = req.GetRequestStream())
-                //{
-                //    dataStream.Write(byteArray, 0, byteArray.Length);
-                //    dataStream.Close();
-                //}
-
-                //// Show the first 10 lines
-                //using (StreamReader sr = new StreamReader(req.GetResponse().GetResponseStream()))
-                //{
-                //    for (int i = 0; i < 10; i++)
-                //        Console.WriteLine(sr.ReadLine());
-                //}
+               
 
 
             }
